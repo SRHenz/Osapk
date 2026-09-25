@@ -1,0 +1,10 @@
+<resources>
+    <color name="primary">#1E6E62</color>
+    <color name="primary_dark">#134B42</color>
+    <color name="accent">#F2994A</color>
+    <color name="background">#F5F7F6</color>
+    <color name="text_dark">#1B2B27</color>
+    <color name="status_aberta">#F2994A</color>
+    <color name="status_andamento">#2D9CDB</color>
+    <color name="status_concluida">#27AE60</color>
+</resources>
