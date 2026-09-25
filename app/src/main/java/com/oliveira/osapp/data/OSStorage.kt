@@ -53,9 +53,21 @@ class OSStorage(private val context: Context) {
         File(pasta, "${os.id}.osrv").delete()
     }
 
-    /** Uri via FileProvider, pronta para ser usada num Intent.ACTION_SEND (ex: WhatsApp). */
+    /** Uri via FileProvider, pronta para ser usada num Intent.ACTION_SEND (ex: WhatsApp).
+     *  Usa uma cópia com nome amigável (nome do cliente), mantendo o arquivo interno
+     *  (nomeado pelo id) intacto para buscas locais. */
     fun uriParaCompartilhar(os: OrdemServico): Uri {
-        val arquivo = salvar(os)
+        salvar(os)
+        val pastaCompartilhar = File(context.cacheDir, "compartilhar")
+        if (!pastaCompartilhar.exists()) pastaCompartilhar.mkdirs()
+        val nomeBase = os.clienteNome.ifBlank { "OS" }
+            .trim()
+            .replace(Regex("[^A-Za-z0-9 ]"), "")
+            .replace(" ", "_")
+            .take(30)
+            .ifBlank { "OS" }
+        val arquivo = File(pastaCompartilhar, "OS_${nomeBase}_${os.id.take(6)}.osrv")
+        arquivo.writeText(gson.toJson(os))
         return FileProvider.getUriForFile(
             context,
             "com.oliveira.osapp.fileprovider",

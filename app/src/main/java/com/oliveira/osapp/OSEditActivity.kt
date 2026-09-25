@@ -1,6 +1,7 @@
 package com.oliveira.osapp
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -73,12 +74,18 @@ class OSEditActivity : AppCompatActivity() {
         }
     }
 
-    /** Decide se a OS vem de um arquivo .osrv aberto de fora, da lista local, ou é nova. */
+    /** Decide se a OS vem de um arquivo .osrv aberto de fora (ACTION_VIEW),
+     *  recebida pelo botão "Compartilhar" do WhatsApp (ACTION_SEND),
+     *  da lista local, ou se é uma OS nova. */
     private fun resolverOrigemDaOS(): OrdemServico {
-        val uri = intent?.data
-        if (intent?.action == Intent.ACTION_VIEW && uri != null) {
+        val uriRecebida: Uri? = when (intent?.action) {
+            Intent.ACTION_VIEW -> intent?.data
+            Intent.ACTION_SEND -> intent?.getParcelableExtra(Intent.EXTRA_STREAM)
+            else -> null
+        }
+        if (uriRecebida != null) {
             return try {
-                storage.importar(uri)
+                storage.importar(uriRecebida)
             } catch (e: Exception) {
                 Toast.makeText(this, "Não foi possível ler o arquivo .osrv", Toast.LENGTH_LONG).show()
                 OrdemServico(dataCriacao = formatoData.format(Date()))

@@ -2,5 +2,6 @@
 <paths>
     <files-path name="ordens" path="ordens/" />
     <cache-path name="cache_ordens" path="ordens/" />
+    <cache-path name="compartilhar" path="compartilhar/" />
     <external-cache-path name="ext_cache_ordens" path="ordens/" />
 </paths>
