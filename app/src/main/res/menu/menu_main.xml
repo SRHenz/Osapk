@@ -6,4 +6,9 @@
         android:title="Importar OS"
         android:icon="@android:drawable/ic_menu_upload"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_meu_nome"
+        android:title="Meu nome"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        app:showAsAction="never" />
 </menu>

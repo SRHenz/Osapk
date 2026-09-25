@@ -1,9 +1,11 @@
 package com.oliveira.osapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.oliveira.osapp.adapter.OSAdapter
 import com.oliveira.osapp.data.OSStorage
+import com.oliveira.osapp.data.Preferencias
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,6 +57,30 @@ class MainActivity : AppCompatActivity() {
         findViewById<android.view.View>(R.id.fabNovaOS).setOnClickListener {
             startActivity(Intent(this, OSEditActivity::class.java))
         }
+
+        perguntarNomeSePrimeiraVez()
+    }
+
+    private fun perguntarNomeSePrimeiraVez() {
+        val prefs = Preferencias(this)
+        if (prefs.nomeTecnico.isBlank()) {
+            mostrarDialogoNome(prefs, primeiraVez = true)
+        }
+    }
+
+    private fun mostrarDialogoNome(prefs: Preferencias, primeiraVez: Boolean) {
+        val input = EditText(this)
+        input.setText(prefs.nomeTecnico)
+        input.hint = "Seu nome"
+        AlertDialog.Builder(this)
+            .setTitle(if (primeiraVez) "Bem-vindo! Qual é o seu nome?" else "Alterar nome do técnico")
+            .setMessage(if (primeiraVez) "Esse nome será usado como técnico responsável nas OS que você criar." else null)
+            .setView(input)
+            .setCancelable(!primeiraVez)
+            .setPositiveButton("Salvar") { _, _ ->
+                prefs.nomeTecnico = input.text.toString().trim()
+            }
+            .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,6 +92,10 @@ class MainActivity : AppCompatActivity() {
         if (item.itemId == R.id.action_importar) {
             // Abre o seletor de arquivos: o usuário navega até o .osrv salvo (ex: pasta Downloads)
             importarArquivo.launch("*/*")
+            return true
+        }
+        if (item.itemId == R.id.action_meu_nome) {
+            mostrarDialogoNome(Preferencias(this), primeiraVez = false)
             return true
         }
         return super.onOptionsItemSelected(item)

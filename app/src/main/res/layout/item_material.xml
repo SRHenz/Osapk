@@ -11,6 +11,8 @@
         android:layout_width="0dp"
         android:layout_weight="2"
         android:layout_height="wrap_content"
+        android:textColor="@color/text_dark"
+        android:textColorHint="#99000000"
         android:hint="Material" />
 
     <EditText
@@ -19,6 +21,8 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:textColor="@color/text_dark"
+        android:textColorHint="#99000000"
         android:hint="Qtd" />
 
     <ImageButton
